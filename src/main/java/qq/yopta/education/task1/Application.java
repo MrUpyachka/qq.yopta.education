@@ -2,6 +2,10 @@ package qq.yopta.education.task1;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
  * Entry-point for app.<br>
@@ -9,8 +13,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author upyachka.
  */
 @SpringBootApplication
-public class Application {
+public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+    }
+
+    @Bean
+    public ViewResolver getViewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/");
+        resolver.setSuffix(".jsp");
+        return resolver;
     }
 }

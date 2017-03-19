@@ -1,25 +1,46 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE",
+                'org.akhikhl.gretty:gretty:+'
     }
+}
+
+ext {
+    latestVersion = '+'
 }
 
 apply plugin: 'java' // its Java project.
 apply plugin: 'war' // We want to build web application.
 apply plugin: 'idea' // sync with IDEA.
 apply plugin: 'org.springframework.boot' // configure defaults for web app.
+apply plugin: 'org.akhikhl.gretty' // nice container for local runs
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web") {
-        exclude module: "spring-boot-starter-tomcat" // We are not using tomcat, for now.
-    }
-    compile "org.springframework.boot:spring-boot-starter-jetty" // TODO use gretty instead.
-    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-web"
+
+    compile "org.apache.logging.log4j:log4j-api:$latestVersion",
+            "org.apache.logging.log4j:log4j-core:$latestVersion",
+            "org.apache.commons:commons-io:$latestVersion",
+            "org.apache.commons:commons-lang3:$latestVersion",
+            "com.google.guava:guava:$latestVersion"
+
+    runtime "javax.servlet:jstl:$latestVersion",
+            "javax.servlet:servlet-api:$latestVersion",
+            "taglibs:standard:$latestVersion",
+            "javax.servlet.jsp:jsp-api:$latestVersion"
+}
+
+gretty {
+    httpPort = 8081
+    contextPath = '/'
+    servletContainer = 'tomcat8' // tomcat7 or tomcat8
 }
